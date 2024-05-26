@@ -4,7 +4,7 @@ class StationAutomate(val graph:Graph){
         createStationAutomate(graph.keyValues())
     }
 
-    private fun createStationAutomate(stationNames:Set<String>):Unit{
+    private fun createStationAutomate(stationNames:Set<String>){
         stationNames.forEach{str -> createAutomate(start,str,0)}
     }
 
