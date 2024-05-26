@@ -9,7 +9,7 @@ class StationAutomate(val graph:Graph){
     }
 
     private fun createAutomate(auto:Automate,str:String,indStart:Int){
-        val final = indStart+1==str.length
+        val final = indStart==str.length-1
         val autoTransition = auto.getAutomateTransition(str[indStart])
         val char = str[indStart]
         if(autoTransition==null){
@@ -26,16 +26,18 @@ class StationAutomate(val graph:Graph){
 
     }
     private fun isInGraph(str:String,ind:Int,auto:Automate):Boolean {
-        if(ind+1==str.length){
-            return auto.isFinal()
-        }else{
-            var autoTransition = auto.getAutomateTransition(str.get(ind))
-            if(autoTransition==null){
-                return false
+        val automateTransition = auto.getAutomateTransition(str[ind])
+        val final = str.length-1==ind
+        return if(automateTransition!=null){
+            if(final){
+                automateTransition.isFinal()
             }else {
-                return isInGraph(str, ind+1, autoTransition)
+                isInGraph(str,ind+1,automateTransition)
             }
+        }else{
+            false
         }
+
     }
     fun isStation(str:String):Boolean = if (str=="") false else isInGraph(str, 0,start)
 
