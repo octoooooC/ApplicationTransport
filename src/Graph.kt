@@ -23,8 +23,7 @@ class Graph(fileGraph : String,fileLigne : String){
                     val pos = split[0].split(",")
                     mapStation[nom] = Station(
                         nom,
-                        split[2].toShort(),split[12], PointDouble(pos[0].toDouble(), pos[1].trim().toDouble()), split[11], getMode(split[14])
-                    )
+                        split[2].toShort(), PointDouble(pos[0].toDouble(), pos[1].trim().toDouble()),getMode(split[14],)
                 }
             }
         }
