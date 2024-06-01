@@ -4,10 +4,11 @@ class Graph(fileGraph : String,fileLigne : String){
     private var mapStation : HashMap<String,Station> = HashMap<String,Station>()
     private var automateStation : StationAutomate
     init{
-        initGraph(fileGraph)
+        val mapId = initArId(fileLigne)
+        initGraph(fileGraph,mapId)
         automateStation = StationAutomate(this)
     }
-    private fun initGraph(filename:String){
+    private fun initGraph(filename:String,mapId:HashMap<String,ArrayList<String>>){
         val listLines = File(filename).bufferedReader().readLines()
         listLines.forEachIndexed{ ind,line  ->
             if(ind==0){
@@ -17,16 +18,45 @@ class Graph(fileGraph : String,fileLigne : String){
                 val nom = split[7]
                 val station = mapStation[nom]
                 println(nom)
-                if (station != null) {
-                    station.addLigne(split[13], split[11])
-                } else {
-                    val pos = split[0].split(",")
-                    mapStation[nom] = Station(
-                        nom,
-                        split[2].toShort(), PointDouble(pos[0].toDouble(), pos[1].trim().toDouble()),getMode(split[14],)
+                try {
+                    if(station == null){
+                        val pos = split[0].split(",")
+                        mapStation[nom] = Station(
+                            nom,
+                            split[2].toShort(),
+                            PointDouble(pos[0].toDouble(), pos[1].trim().toDouble()),
+                            split[6].toInt()
+                        )
+                    }
+                    val arret = Arret(
+                        split[13],
+                        split[11],
+                        mapId[split[11]]?.get(0)!!.toInt(),
+                        mapId[split[11]]?.get(1)!!.toInt(),
+                        getMode(split[14])
+                    )
+                    mapStation[nom]?.addArret(arret)
+                }catch (nul : NullPointerException){
+                    nul.printStackTrace()
+                    println("Erreur a tel ligne , $nom , ${mapId[split[8]]}, ${split[8]}")
                 }
             }
         }
+    }
+    private fun initArId(fileId:String):HashMap<String,ArrayList<String>>{
+        val mapId = HashMap<String,ArrayList<String>>()
+        File(fileId).forEachLine {
+            line -> val split = line.split(";")
+            if(mapId.contains(split[9])){
+                mapId[split[9]]?.add(split[0])
+            }else{
+                val list = ArrayList<String>()
+                list.add(split[0])
+                mapId[split[9]] = list
+            }
+            println(split[9])
+        }
+        return mapId
     }
     private fun getMode(mode:String):Mode =
         when(mode){
@@ -42,12 +72,4 @@ class Graph(fileGraph : String,fileLigne : String){
     }
     fun values():MutableCollection<Station> = mapStation.values
 
-}
-
-fun main() {
-    val file = "gares.csv"
-    val graph = Graph(file,"")
-    //graph.values().forEach{station -> println(station.toString())}
-    println()
-    println(graph.search("Gagny"))
 }
