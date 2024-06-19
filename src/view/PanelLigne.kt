@@ -2,7 +2,6 @@ package view
 
 import model.Arret
 import javax.swing.*
-//TODO REMPLACER L4ARRAYLIST PAR UN ITERATOR
 class PanelLigne (numLigne_ : String ,listAr:ArrayList<Arret> ): JPanel() {
     val numLigne :String = numLigne_
     val listArret : ArrayList<Arret> = listAr

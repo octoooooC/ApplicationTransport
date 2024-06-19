@@ -68,6 +68,6 @@ class Graph(fileStop: File,fileArret:File){
             "rail" -> Mode.RER
             else -> Mode.ERROR
         }
-    fun getArretLigne(idLigne:String):Iterator<Arret> = mapLigneArret[idLigne]?.iterator()!!
+    fun getArretLigne(idLigne:String):ArrayList<Arret> = mapLigneArret[idLigne]!!
     fun isStation(str:String):Boolean = automate.isStation(str)
 }

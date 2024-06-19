@@ -7,11 +7,12 @@ import java.util.*
 import javax.swing.JFrame
 import javax.swing.*
 
-class FrameApp :JFrame() {
-    private val graph : Graph = Graph(File("untitled/stop.csv"), File("untitled/arrets.csv"))
+class FrameApp (fileStop:File ,fileArrets:File ):JFrame() {
+    private val graph : Graph = Graph(fileStop, fileArrets)
     private val card : CardLayout = CardLayout()
     private val queuePanel : Queue<Pair<String,JPanel>> = LinkedList<Pair<String,JPanel>>()
-    private var showedPanel : String = ""
+    private val panelMetro : PanelMetro = PanelMetro(this,14,graph)
+    //TODO CHANGEZ CA POUR AVOIR UN CALCUL DE LA PLU HAUTE VALEUR
     init{
         this.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
         this.extendedState = JFrame.MAXIMIZED_BOTH
