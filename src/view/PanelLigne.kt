@@ -2,7 +2,7 @@ package view
 
 import model.Arret
 import javax.swing.*
-class PanelLigne (numLigne_ : String ,listAr:ArrayList<Arret> ): JPanel() {
+class PanelLigne (numLigne_ : String ,listAr:ArrayList<Arret>,frame:FrameApp): JPanel() {
     val numLigne :String = numLigne_
     val listArret : ArrayList<Arret> = listAr
     val listBoutonArret : ArrayList<JButton> = ArrayList<JButton>()
@@ -14,10 +14,12 @@ class PanelLigne (numLigne_ : String ,listAr:ArrayList<Arret> ): JPanel() {
             arret ->
             val bouton = JButton(arret.arName)
             bouton.addActionListener {
-                ae -> val pArret = PanelArret(arret)
-                //Ajoute le panelArret au show
-                //Show le panel
-                //TODO Ajouter tout les show
+                val showStr = "${arret.arName}_${numLigne}"
+                if(frame.isInMemory(showStr)){
+                    frame.showPanel(showStr)
+                }else{
+                    frame.ajoutPanel(createPanelArret(arret),showStr)
+                }
             }
 
         }
@@ -25,4 +27,5 @@ class PanelLigne (numLigne_ : String ,listAr:ArrayList<Arret> ): JPanel() {
             arret -> panelAffichage.add(arret)
         }
     }
+    private fun createPanelArret(arret: Arret):PanelArret = PanelArret(arret)
 }

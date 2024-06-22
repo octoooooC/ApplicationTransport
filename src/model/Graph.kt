@@ -27,11 +27,10 @@ class Graph(fileStop: File,fileArret:File){
         //On cree une map avec comme cle les arId et comme valeur une liste de tout les numLigne
         val mapId : HashMap<String,ArrayList<String>> = HashMap<String,ArrayList<String>>()
         fileStop.readLines().forEachIndexed{
-            index, s ->
-            if(index!=0){
+            index, s -> if(index!=0){
                 val split = s.split(";")
                 val arId = split[0].split(":")[3]
-                if(mapId.containsKey(arId)){
+                if(!mapId.containsKey(arId)){
                     mapId[arId] = ArrayList<String>()
                 }
                 mapId[arId]?.add(split[3])
@@ -50,6 +49,7 @@ class Graph(fileStop: File,fileArret:File){
                 map[split[0]]?.forEach {
                     str -> val stop = Stop(split[4],str,split[0])
                     if(!mapLigneArret.containsKey(stop.numLine)){
+                        //print("Affichage du numero ligne ${stop.numLine}")
                         mapLigneArret[stop.numLine]=ArrayList<Arret>()
                     }
                     mapLigneArret[stop.numLine]?.add(mapArret[split[4]]!!)

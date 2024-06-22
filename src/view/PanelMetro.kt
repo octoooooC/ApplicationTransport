@@ -10,25 +10,30 @@ class PanelMetro(frameApp: FrameApp,maxLigne:Int,graph:Graph) : JPanel() {
     private val listBouton : ArrayList<JButton> = ArrayList<JButton>()
     private val panelLayout = JPanel()
     init{
-        panelLayout.layout = GridLayout(maxLigne+ DIVISEGRIDHEIGH-1/ DIVISEGRIDHEIGH,maxLigne+ DIVISEGRIDWITH-1/ DIVISEGRIDWITH)
+        val rows = (maxLigne+ DIVISEGRIDHEIGH-1)/ DIVISEGRIDHEIGH
+        val cols = (maxLigne+ DIVISEGRIDWITH-1)/ DIVISEGRIDWITH
+        print("$rows $cols")
+        panelLayout.layout = GridLayout(rows,cols)
         for(i in 1..maxLigne){
             val numLigne ="$i"
             val button = JButton("Ligne $numLigne")
-            button.isOpaque=false
+            button.isOpaque=true
             button.addActionListener{
                 if(frame.isInMemory(numLigne)){
-                    frame.showPanel(numLigne)
+                    frame.showPanel("Ligne $numLigne")
                 }else{
-                    frame.ajoutPanel(createPanel(numLigne),numLigne)
+                    frame.ajoutPanel(createPanel(numLigne),"Ligne $numLigne")
                 }
             }
             listBouton.add(button)
+            panelLayout.add(button)
         }
+        add(panelLayout)
     }
     companion object{
         const val DIVISEGRIDHEIGH = 3
         const val DIVISEGRIDWITH = 5
     }
 
-    private fun createPanel(nomLigne: String):PanelLigne = PanelLigne(nomLigne,gra.getArretLigne(nomLigne))
+    private fun createPanel(nomLigne: String):PanelLigne = PanelLigne(nomLigne,gra.getArretLigne(nomLigne),frame)
 }
