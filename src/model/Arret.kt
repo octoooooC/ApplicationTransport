@@ -13,7 +13,7 @@ data class Arret(val arname:String, val zda:String, val mod : Mode, val arAcess:
     /**
     * model.Mode de transport du quai (Tram,Metro,Bus,Rer)
     * */
-    private val mode : Mode = mod
+    val mode : Mode = mod
     val arAccesibilty : String = arAcess
     val arAudibaleSignals : String = arAudibale
     val arVisualSignals : String = arVisu

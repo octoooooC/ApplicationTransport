@@ -43,31 +43,33 @@ class Graph(fileStop: File,fileArret:File){
         fileArret.readLines().forEachIndexed { index, s ->
             val split = s.split(";")
             if(index!=0){
-                if(!mapArret.containsKey(split[4])){
-                    mapArret[split[4]] = Arret(split[4],split[15],getMode(split[13]),split[10],split[11],split[12])
+                if(!mapArret.containsKey(split[9])){
+                    mapArret[split[9]] = Arret(split[4],split[15],getMode(split[5]),split[9],split[11],split[12])
+                    println("Zda en theorie ${mapArret[split[4]]?.zda}")
                 }
                 map[split[0]]?.forEach {
                     str -> val stop = Stop(split[4],str,split[0])
-                    if(!mapLigneArret.containsKey(stop.numLine)){
-                        //print("Affichage du numero ligne ${stop.numLine}")
-                        mapLigneArret[stop.numLine]=ArrayList<Arret>()
+                    mapArret[split[9]]?.addStop(stop)
+                    val cle = "${mapArret[split[9]]?.mode} ${stop.numLine}"
+                    println("La cle : $cle , ${mapArret[split[9]]}")
+                    if(!mapLigneArret.containsKey(cle)){
+                        mapLigneArret[cle]=ArrayList<Arret>()
                     }
-                    mapLigneArret[stop.numLine]?.add(mapArret[split[4]]!!)
-                    mapArret[split[4]]?.addStop(stop)
-                    
-
+                    mapLigneArret[cle]?.add(mapArret[split[9]]!!)
                 }
             }
         }
     }
-    private fun getMode(s:String): Mode =
-        when(s){
+    private fun getMode(s:String): Mode {
+        print(s)
+        return when (s) {
             "metro" -> Mode.METRO
             "bus" -> Mode.BUS
             "tram" -> Mode.TRAM
             "rail" -> Mode.RER
             else -> Mode.ERROR
         }
+    }
     fun getArretLigne(idLigne:String):ArrayList<Arret> = mapLigneArret[idLigne]!!
     fun isStation(str:String):Boolean = automate.isStation(str)
 }

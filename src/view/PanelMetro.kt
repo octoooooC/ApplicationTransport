@@ -19,10 +19,12 @@ class PanelMetro(frameApp: FrameApp,maxLigne:Int,graph:Graph) : JPanel() {
             val button = JButton("Ligne $numLigne")
             button.isOpaque=true
             button.addActionListener{
-                if(frame.isInMemory(numLigne)){
-                    frame.showPanel("Ligne $numLigne")
+                if(frame.isInMemory("Metro $numLigne")){
+                    println("Affichage du panel")
+                    frame.showPanel("Metro $numLigne")
                 }else{
-                    frame.ajoutPanel(createPanel(numLigne),"Ligne $numLigne")
+                    println("Creation du panel")
+                    frame.ajoutPanel(createPanel("Metro $numLigne"),"Metro $numLigne")
                 }
             }
             listBouton.add(button)

@@ -17,7 +17,8 @@ class FrameApp (fileStop:File ,fileArrets:File ):JFrame() {
     private val panelMetro : PanelMetro = PanelMetro(this,14,graph)
     private val panelLayout : JPanel = JPanel(BorderLayout())
     private val panelBouton : JPanel = JPanel()
-    //TODO CHANGEZ CA POUR AVOIR UN CALCUL DE LA PLU HAUTE VALEUR
+    private val panelLigneBus = PanelLigneBus()
+    //TODO CHANGEZ CA POUR AVOIR UN CALCUL DE LA PLU HAUTE VALEUR DE LIGNE DE METRO
     init{
         this.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
         this.extendedState = JFrame.MAXIMIZED_BOTH
@@ -25,9 +26,13 @@ class FrameApp (fileStop:File ,fileArrets:File ):JFrame() {
         this.isResizable = false
         this.layout = card
         this.setLocationRelativeTo(null)
+
+        panelBouton.add(createButtonShow("Metro","PanelMetro"))
+        panelBouton.add(createButtonShow("Bus","PanelBus"))
         panelCardLayout.add(panelMetro,"PanelMetro")
         this.card.show(panelCardLayout,"PanelMetro")
         panelLayout.add(panelCardLayout,BorderLayout.CENTER)
+        panelLayout.add(panelBouton,BorderLayout.SOUTH)
         this.add(panelLayout)
         this.pack()
         this.validate()
@@ -38,7 +43,9 @@ class FrameApp (fileStop:File ,fileArrets:File ):JFrame() {
      * Pour verifier si un panel a déja été creer et est donc dans le memoire pour eviter les doublons
      */
     fun isInMemory(nom:String):Boolean {
-        queuePanel.forEach{pair -> if(pair.first == nom){ return true}}
+        println("Mot recherche $nom")
+        queuePanel.forEach{pair -> println(pair.first)
+            if(pair.first == nom){ return true}}
         return false
     }
     /**
@@ -49,7 +56,7 @@ class FrameApp (fileStop:File ,fileArrets:File ):JFrame() {
             removeOnePanel()
         }
         queuePanel.add(Pair(nom,panel))
-        add(panel,nom)
+        panelCardLayout.add(panel,nom)
         card.show(panelCardLayout,nom)
     }
     fun showPanel(nom:String){
@@ -66,9 +73,16 @@ class FrameApp (fileStop:File ,fileArrets:File ):JFrame() {
         }
 
     }
+    private fun createButtonShow(nom:String, show:String) : JButton {
+        val button = JButton(nom)
+        button.addActionListener {
+            this.card.show(panelCardLayout,show)
+        }
+        return button
+    }
     private fun removeOnePanel(){
         val panel = queuePanel.remove().second
-        remove(panel)
+        panelCardLayout.remove(panel)
     }
     fun clearAll(){
         while(queuePanel.isNotEmpty()){
